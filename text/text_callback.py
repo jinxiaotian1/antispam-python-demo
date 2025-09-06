@@ -9,8 +9,8 @@ python版本：python3.7
     2. $ python text_callback.py
 """
 __author__ = 'yidun-dev'
-__date__ = '2019/11/27'
-__version__ = '0.2-dev'
+__date__ = '2024/12/19'
+__version__ = '0.3-dev'
 
 import hashlib
 import time
@@ -24,7 +24,7 @@ from gmssl import sm3, func
 class TextCallbackAPIDemo(object):
     """文本离线检测结果获取接口示例代码"""
     
-    API_URL = "http://as.dun.163.com/v5/text/callback/results"
+    API_URL = "https://as.dun.163.com/v5/text/callback/results"
     VERSION = "v5.2"
 
     def __init__(self, secret_id, secret_key, business_id):
@@ -82,6 +82,7 @@ class TextCallbackAPIDemo(object):
             return json.loads(content)
         except Exception as ex:
             print("调用API接口失败:", str(ex))
+            return {"code": 500, "msg": str(ex)}
 
 
 if __name__ == "__main__":
@@ -92,6 +93,10 @@ if __name__ == "__main__":
     api = TextCallbackAPIDemo(SECRET_ID, SECRET_KEY, BUSINESS_ID)
     
     ret = api.check()
+
+    if ret is None:
+        print("ERROR: API调用失败，返回None")
+        exit(1)
 
     code: int = ret["code"]
     msg: str = ret["msg"]
